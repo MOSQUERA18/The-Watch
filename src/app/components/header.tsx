@@ -1,13 +1,14 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Watch, Moon, ShoppingCart, X, Menu, ChevronDown } from "lucide-react"
+import { Watch,  ShoppingCart, X, Menu, ChevronDown } from "lucide-react" // Added Sun
 import { useCart } from "@/context/cart-context"
 import { cn } from "@/lib/utils"
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const { cart, theme, toggleTheme, openCart } = useCart()
+  // const [isDarkMode, setIsDarkMode] = useState(false) // This state is now managed by useCart's theme
+  const { cart, theme, openCart } = useCart() // Destructure theme and toggleTheme from useCart
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0)
 
   useEffect(() => {
@@ -29,21 +30,37 @@ export function Header() {
       className="header fixed top-0 left-0 w-full bg-brand-primary z-fixed transition-all duration-300 ease-in-out"
       id="header"
     >
-      <nav className="nav container mx-auto h-16 flex justify-between items-center px-4">
+      <nav className="nav justify-center items-center w-full h-16 px-4 md:px-8 lg:px-12 xl:px-16 2xl:px-20 flex flex-row justify-between">
         <a href="#" className="nav__logo flex items-center text-xl font-semibold text-white">
           <Watch className="nav__logo-icon mr-2 text-2xl text-brand-accent" /> The Marlon Watch
         </a>
-
+        {/* Overlay para mobile menu */}
+        {isMenuOpen && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-40 z-[1400] md:hidden"
+            onClick={() => setIsMenuOpen(false)}
+          />
+        )}
         <div
           className={cn(
-            "nav__menu fixed top-0 right-0 w-3/4 h-full bg-brand-primary shadow-light-dark transition-all duration-300 ease-in-out z-[1500] md:relative md:w-auto md:h-auto md:bg-transparent md:shadow-none md:translate-x-0",
+            `nav__menu fixed top-0 right-0 w-3/4 h-full bg-brand-primary shadow-light-dark transition-transform duration-300 ease-in-out z-[1501] md:static md:w-auto md:h-auto md:bg-transparent md:shadow-none md:translate-x-0 md:flex md:items-center md:flex-1 md:justify-start`,
             {
-              "show-menu": isMenuOpen, // Use the class defined in globals.css
+              "translate-x-0": isMenuOpen,
+              "translate-x-full": !isMenuOpen,
             },
           )}
           id="nav-menu"
         >
-          <ul className="nav__list flex flex-col p-8 gap-6 md:flex-row md:p-0 md:gap-8">
+            {/* Botón cerrar */}
+          {isMenuOpen && (
+            <div
+              className="absolute top-6 right-6 text-3xl cursor-pointer md:hidden"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <X className="text-white dark:text-text-dark-primary" />
+            </div>
+          )}
+          <ul className="nav__list flex flex-row p-8 gap-6 md:flex-row md:p-0 md:gap-12">
             <li className="nav__item">
               <a
                 href="#hero-gallery"
@@ -159,19 +176,14 @@ export function Header() {
               </a>
             </li>
           </ul>
-          <div
-            className="nav__close absolute top-4 right-4 text-2xl cursor-pointer md:hidden"
-            id="nav-close"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            <X />
-          </div>
         </div>
+        <div className="nav__btns flex items-center gap-4 z-[1600]">
+          {/* Theme Toggle */}
+          {/* <div className="nav__icon-wrapper w-8 h-8" onClick={toggleTheme}>
+              <Moon className="change-theme text-2xl text-white dark:text-text-dark-primary" id="theme-button" />
+          </div> */}
 
-        <div className="nav__btns flex items-center gap-4">
-          <div className="nav__icon-wrapper w-8 h-8" onClick={toggleTheme}>
-            <Moon className="change-theme text-2xl text-white dark:text-text-dark-primary" id="theme-button" />
-          </div>
+          {/* Shopping Cart */}
           <div className="nav__shop relative cursor-pointer w-8 h-8" id="cart-shop" onClick={openCart}>
             <ShoppingCart className="text-2xl text-white dark:text-text-dark-primary" />
             {totalItems > 0 && (
@@ -183,12 +195,14 @@ export function Header() {
               </span>
             )}
           </div>
+
+          {/* Mobile Menu Toggle */}
           <div
             className="nav__toggle text-2xl cursor-pointer md:hidden w-8 h-8"
             id="nav-toggle"
             onClick={() => setIsMenuOpen(true)}
           >
-            <Menu />
+            <Menu className="text-white dark:text-text-dark-primary" />
           </div>
         </div>
       </nav>

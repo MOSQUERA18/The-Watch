@@ -104,13 +104,13 @@ export function Cart() {
       </div>
 
       <div className="cart__buttons flex flex-col gap-3 mt-6">
-        <button
+        {/* <button
           className="button cart__checkout w-full py-3 bg-brand-accent text-brand-primary font-semibold rounded-md hover:bg-brand-accent transition-colors duration-300"
           id="checkout-btn"
           onClick={openModal}
         >
           CHECKOUT
-        </button>
+        </button> */}
         <button
           className="button cart__whatsapp w-full py-3 bg-brand-whatsapp text-white font-semibold rounded-md hover:bg-brand-whatsapp transition-colors duration-300 flex items-center justify-center gap-2"
           id="whatsapp-btn"

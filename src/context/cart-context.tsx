@@ -24,7 +24,7 @@ interface CartContextType {
   cart: CartItem[]
   isCartOpen: boolean
   isModalOpen: boolean
-  theme: "light" | "dark"
+  theme:"dark"
   whatsappNumber: string
   addToCart: (product: CartItem) => void
   removeFromCart: (productId: string) => void
@@ -45,7 +45,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([])
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [theme, setTheme] = useState<"light" | "dark">("light")
+  const [theme, setTheme] = useState("dark")
   const whatsappNumber = "573213554763" // CAMBIA ESTE NÚMERO POR TU NÚMERO DE WHATSAPP
 
   // Load cart and theme from localStorage on mount
@@ -55,8 +55,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       setCart(JSON.parse(savedCart))
     }
     const savedTheme = localStorage.getItem("selected-theme")
-    if (savedTheme === "dark" || savedTheme === "light") {
-      setTheme(savedTheme)
+    if (savedTheme === "dark") {
+      setTheme("dark")
     }
   }, [])
 
@@ -219,7 +219,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   )
 
   const toggleTheme = useCallback(() => {
-    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"))
+    setTheme("dark")
   }, [])
 
   return (
